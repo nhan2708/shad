@@ -42,14 +42,14 @@ if (match) {
   }
 
   obj.subscriber.entitlements[entitlement] = nhan2708;
-  obj.subscriber.entitlements["record_15s"] = nhan2708;
-  obj.subscriber.subscriptions["record_15s"] = ohoang7;
+  obj.subscriber.entitlements["locketcamera"] = nhan2708;
+  obj.subscriber.subscriptions["locketcamera"] = ohoang7;
 
 } else {
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
   obj.subscriber.entitlements.pro = nhan2708;
-  obj.subscriber.entitlements["record_15s"] = nhan2708;
-  obj.subscriber.subscriptions["record_15s"] = ohoang7;
+  obj.subscriber.entitlements["locketcamera"] = nhan2708;
+  obj.subscriber.subscriptions["locketcamera"] = ohoang7;
 }
 
 // Gợi ý thêm: bật cờ huy hiệu nếu app có dùng
