@@ -1,5 +1,5 @@
 /***********************************************
-> Code by Ohoang7 + nhan2708 modified
+> Code by Ohoang7
 ***********************************************/
 var request = $request;
 
@@ -13,7 +13,7 @@ const options = {
 }
 
 $httpClient.get(options, function(error, newResponse, data){
-
+  
 const ent = JSON.parse(data);
 
 let jsonToUpdate = {
@@ -40,6 +40,7 @@ for (const [entitlementId, productInfo] of Object.entries(productEntitlementMapp
   const productIdentifier = productInfo.product_identifier;
   const entitlements = productInfo.entitlements;
 
+
   for (const entitlement of entitlements) {
     jsonToUpdate.subscriber.entitlements[entitlement] = {
       "purchase_date": "2024-07-26T01:01:01Z",
@@ -51,6 +52,7 @@ for (const [entitlementId, productInfo] of Object.entries(productEntitlementMapp
       "product_identifier": productIdentifier
     };
 
+    // Add product identifier to subscriptions
     jsonToUpdate.subscriber.subscriptions[productIdentifier] = {
       "expires_date": "9692-01-01T01:01:01Z",
       "original_purchase_date": "2024-07-26T01:01:01Z",
