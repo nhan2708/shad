@@ -9,8 +9,10 @@ const mapping = {
 var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 var obj = JSON.parse($response.body);
 
+// Thông báo cho người dùng
 obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
 
+// Dữ liệu subscription giả
 var ohoang7 = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
@@ -43,6 +45,8 @@ if (match) {
   }
 
   obj.subscriber.entitlements[entitlement] = nhan2708;
+
+  // ✅ Thêm quyền quay video 15s
   obj.subscriber.entitlements["record_15s"] = nhan2708;
 
 } else {
