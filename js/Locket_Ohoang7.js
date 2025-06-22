@@ -6,7 +6,7 @@ const mapping = {
 var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 var obj = JSON.parse($response.body);
 
-obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
+obj.Attention = "Chúc mừng bạn! Không chia sẻ hoặc bán lại!";
 
 var ohoang7 = {
   is_sandbox: false,
@@ -44,8 +44,18 @@ if (match) {
   obj.subscriber.entitlements.pro = nhan2708;
 }
 
-// ✅ Bổ sung nhiều khả năng tên quay video
-const videoKeys = ["record_15s", "video15s", "vip_record", "shorts_record", "gold_record"];
+// 🟡 Thử toàn bộ quyền video 15s+
+const videoKeys = [
+  "record_15s",
+  "vip_record",
+  "long_record",
+  "pro_video",
+  "video_long",
+  "record_pro",
+  "vip_shorts",
+  "Gold_Record"
+];
+
 for (const key of videoKeys) {
   obj.subscriber.entitlements[key] = nhan2708;
 }
