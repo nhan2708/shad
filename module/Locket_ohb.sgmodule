@@ -1,14 +1,76 @@
-#!name=Locket-nhan2708_Gold
-#!desc=Unlock Locket Gold Badge
-#!author=nhan2708
+#!name=Locket-Ohoang7_Gold
+#!desc=Crack By Ohoang7
+#!url=https://raw.githubusercontent.com/vuong2023/shad/main/modules/Locket_ohb.sgmodule
 
 [Script]
-revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), 
-script-path=https://raw.githubusercontent.com/nhan2708/shad/main/js/Locket_Ohoang7.js, 
-requires-body=true, max-size=-1, timeout=60
+# ~ By Vuong2023
+# ～ Egern transfer to Shadowrocket & Surge & LanceX
 
-deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), 
-script-path=https://raw.githubusercontent.com/nhan2708/shad/main/js/deleteHeader.js, timeout=60
+# Chặn phản hồi từ RevenueCat và chèn quyền VIP giả
+revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), requires-body=true, max-size=-1, timeout=60, script=
+
+  // ========= ID ========= //
+  const mapping = {
+    '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
+    'Locket': ['Gold']
+  };
+
+  // ========= Phần cố định ========= //
+  // =========  @Ohoang7 ========= //
+  var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
+  var obj = JSON.parse($response.body);
+
+  obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
+
+  var ohoang7 = {
+    is_sandbox: false,
+    ownership_type: "PURCHASED",
+    billing_issues_detected_at: null,
+    period_type: "normal",
+    expires_date: "2099-12-18T01:04:17Z",
+    grace_period_expires_date: null,
+    unsubscribe_detected_at: null,
+    original_purchase_date: "2024-07-28T01:04:18Z",
+    purchase_date: "2024-07-28T01:04:17Z",
+    store: "app_store"
+  };
+
+  var vuong2023 = {
+    grace_period_expires_date: null,
+    purchase_date: "2024-07-28T01:04:17Z",
+    product_identifier: "com.ohoang7.premium.yearly",
+    expires_date: "2099-12-18T01:04:17Z"
+  };
+
+  const match = Object.keys(mapping).find(e => ua.includes(e));
+
+  if (match) {
+    let [entitlement, subscription_id] = mapping[match];
+    if (subscription_id) {
+      vuong2023.product_identifier = subscription_id;
+      obj.subscriber.subscriptions[subscription_id] = ohoang7;
+    } else {
+      obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
+    }
+    obj.subscriber.entitlements[entitlement] = vuong2023;
+  } else {
+    obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
+    obj.subscriber.entitlements.pro = vuong2023;
+  }
+
+  $done({ body: JSON.stringify(obj) });
+
+# Xoá một số header để tránh bị phát hiện khi gửi lên server
+deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), timeout=60, script=
+
+  // Xóa một số header gửi đến RevenueCat để tránh bị theo dõi
+  delete $request.headers["x-revenuecat-etag"];
+  delete $request.headers["X-RevenueCat-ETag"];
+  delete $request.headers["x-revenuecat-token"];
+  delete $request.headers["X-RevenueCat-Token"];
+  delete $request.headers["x-revenuecat-user-id"];
+  delete $request.headers["X-RevenueCat-User-Id"];
+  $done({ headers: $request.headers });
 
 [MITM]
 hostname = %APPEND% api.revenuecat.com
