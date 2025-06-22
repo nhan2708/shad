@@ -1,14 +1,14 @@
-const mapping = {
-  '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
-  'Locket': ['Gold']
-};
-
-var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
+// ======= Crack by nhan2708 ======= //
 var obj = JSON.parse($response.body);
 
-obj.Attention = "Chúc mừng bạn! Không chia sẻ hoặc bán lại!";
+const nhan2708 = {
+  grace_period_expires_date: null,
+  purchase_date: "2024-07-28T01:04:17Z",
+  product_identifier: "com.nhan2708.premium.yearly",
+  expires_date: "2099-12-18T01:04:17Z"
+};
 
-var ohoang7 = {
+const subscription = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
   billing_issues_detected_at: null,
@@ -21,45 +21,9 @@ var ohoang7 = {
   store: "app_store"
 };
 
-var nhan2708 = {
-  grace_period_expires_date: null,
-  purchase_date: "2024-07-28T01:04:17Z",
-  product_identifier: "com.ohoang7.premium.yearly",
-  expires_date: "2099-12-18T01:04:17Z"
-};
+// Gán gói đăng ký và quyền GOLD
+obj.subscriber.subscriptions["com.nhan2708.premium.yearly"] = subscription;
+obj.subscriber.entitlements["Gold"] = nhan2708;
 
-const match = Object.keys(mapping).find(e => ua.includes(e));
-
-if (match) {
-  let [entitlement, sub_id] = mapping[match];
-  if (sub_id) {
-    nhan2708.product_identifier = sub_id;
-    obj.subscriber.subscriptions[sub_id] = ohoang7;
-  } else {
-    obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
-  }
-  obj.subscriber.entitlements[entitlement] = nhan2708;
-} else {
-  obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
-  obj.subscriber.entitlements.pro = nhan2708;
-}
-
-// 🟡 Thử toàn bộ quyền video 15s+
-const videoKeys = [
-  "record_15s",
-  "vip_record",
-  "long_record",
-  "pro_video",
-  "video_long",
-  "record_pro",
-  "vip_shorts",
-  "Gold_Record",
-  "record",
-  "video"
-];
-
-for (const key of videoKeys) {
-  obj.subscriber.entitlements[key] = nhan2708;
-}
-
+obj.Attention = "🎉 Huy hiệu GOLD đã được bật!";
 $done({ body: JSON.stringify(obj) });
