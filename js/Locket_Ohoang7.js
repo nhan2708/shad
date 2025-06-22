@@ -1,18 +1,13 @@
-// ========= ID Mapping ========= //
 const mapping = {
   '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
   'Locket': ['Gold']
 };
 
-// ========= Logic chính ========= //
-
 var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 var obj = JSON.parse($response.body);
 
-// Thông báo cho người dùng
 obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
 
-// Dữ liệu subscription giả
 var ohoang7 = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
@@ -43,16 +38,16 @@ if (match) {
   } else {
     obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
   }
-
   obj.subscriber.entitlements[entitlement] = nhan2708;
-
-  // ✅ Thêm quyền quay video 15s
-  obj.subscriber.entitlements["record_15s"] = nhan2708;
-
 } else {
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
   obj.subscriber.entitlements.pro = nhan2708;
-  obj.subscriber.entitlements["record_15s"] = nhan2708;
+}
+
+// ✅ Bổ sung nhiều khả năng tên quay video
+const videoKeys = ["record_15s", "video15s", "vip_record", "shorts_record", "gold_record"];
+for (const key of videoKeys) {
+  obj.subscriber.entitlements[key] = nhan2708;
 }
 
 $done({ body: JSON.stringify(obj) });
