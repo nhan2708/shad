@@ -53,7 +53,9 @@ const videoKeys = [
   "video_long",
   "record_pro",
   "vip_shorts",
-  "Gold_Record"
+  "Gold_Record",
+  "record",
+  "video"
 ];
 
 for (const key of videoKeys) {
