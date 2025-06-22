@@ -1,52 +1,47 @@
-/***********************************************
-> ScriptName        Locket RevenueCat Debugger
-> Author            Custom by ChatGPT
-> Use               Unlock Locket & log actual response
-> For               Shadowrocket / Stash / Surge
-***********************************************/
+#!name=Locket RevenueCat Debug
+#!desc=Log + thử unlock Locket 15s + badge
 
-// ==== Log original JSON response ====
-const ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
-const obj = JSON.parse($response.body);
-
-console.log("===== UA =====");
-console.log(ua);
-console.log("===== ORIGINAL RevenueCat JSON =====");
-console.log(JSON.stringify(obj, null, 2));
-
-// ==== Unlock Section ====
-obj.subscriber = {
-  entitlements: {
-    Gold: {
-      expires_date: "2099-12-31T23:59:59Z",
-      product_identifier: "com.ohoang7.premium.yearly",
-      purchase_date: "2023-01-01T00:00:00Z"
+[Script]
+log_revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/[^/]+$, requires-body=true, script=
+  const ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
+  const obj = JSON.parse($response.body);
+  console.log("===== UA =====");
+  console.log(ua);
+  console.log("===== ORIGINAL RevenueCat JSON =====");
+  console.log(JSON.stringify(obj, null, 2));
+  obj.subscriber = {
+    entitlements: {
+      Gold: {
+        expires_date: "2099-12-31T23:59:59Z",
+        product_identifier: "com.ohoang7.premium.yearly",
+        purchase_date: "2023-01-01T00:00:00Z"
+      },
+      record_15s: {
+        expires_date: "2099-12-31T23:59:59Z",
+        product_identifier: "com.ohoang7.premium.yearly",
+        purchase_date: "2023-01-01T00:00:00Z"
+      },
+      badge: {
+        expires_date: "2099-12-31T23:59:59Z",
+        product_identifier: "com.ohoang7.premium.yearly",
+        purchase_date: "2023-01-01T00:00:00Z"
+      }
     },
-    record_15s: {
-      expires_date: "2099-12-31T23:59:59Z",
-      product_identifier: "com.ohoang7.premium.yearly",
-      purchase_date: "2023-01-01T00:00:00Z"
-    },
-    badge: {
-      expires_date: "2099-12-31T23:59:59Z",
-      product_identifier: "com.ohoang7.premium.yearly",
-      purchase_date: "2023-01-01T00:00:00Z"
+    subscriptions: {
+      "com.ohoang7.premium.yearly": {
+        expires_date: "2099-12-31T23:59:59Z",
+        original_purchase_date: "2023-01-01T00:00:00Z",
+        purchase_date: "2023-01-01T00:00:00Z",
+        ownership_type: "PURCHASED",
+        store: "app_store",
+        is_sandbox: false,
+        period_type: "normal"
+      }
     }
-  },
-  subscriptions: {
-    "com.ohoang7.premium.yearly": {
-      expires_date: "2099-12-31T23:59:59Z",
-      original_purchase_date: "2023-01-01T00:00:00Z",
-      purchase_date: "2023-01-01T00:00:00Z",
-      ownership_type: "PURCHASED",
-      store: "app_store",
-      is_sandbox: false,
-      period_type: "normal"
-    }
-  }
-};
+  };
+  console.log("===== FINAL JSON TO RETURN =====");
+  console.log(JSON.stringify(obj, null, 2));
+  $done({ body: JSON.stringify(obj) });
 
-console.log("===== FINAL JSON TO RETURN =====");
-console.log(JSON.stringify(obj, null, 2));
-
-$done({ body: JSON.stringify(obj) });
+[MITM]
+hostname = %APPEND% api.revenuecat.com
