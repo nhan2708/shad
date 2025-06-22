@@ -16,7 +16,8 @@ function setHeaderValue(headers, name, value) {
 
 let modifiedHeaders = $request.headers;
 setHeaderValue(modifiedHeaders, "X-RevenueCat-ETag", "");
+
+// Nếu muốn có thể thêm dòng sau:
 // setHeaderValue(modifiedHeaders, "Authorization", "");
-// setHeaderValue(modifiedHeaders, "X-RevenueCat-User-ID", "");
 
 $done({ headers: modifiedHeaders });
