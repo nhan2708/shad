@@ -1,0 +1,14 @@
+#!name=LogRevenueCat
+#!desc=Ghi lại JSON từ RevenueCat để debug quyền
+
+[Script]
+log_revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/[^/]+$, requires-body=true, script=
+
+  const obj = JSON.parse($response.body);
+  console.log("=== START LOG RevenueCat ===");
+  console.log(JSON.stringify(obj, null, 2));
+  console.log("=== END LOG RevenueCat ===");
+  $done({ body: $response.body });
+
+[MITM]
+hostname = %APPEND% api.revenuecat.com
