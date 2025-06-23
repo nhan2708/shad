@@ -1,7 +1,7 @@
 // ========= ID Mapping ========= //
 const mapping = {
   '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
-  'Locket': ['gold']
+  'Locket': ['Gold']
 };
 
 // ========= Logic chính ========= //
@@ -11,6 +11,7 @@ const obj = JSON.parse($response.body);
 
 obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
 
+// Thông tin gói đăng ký
 const subscriptionInfo = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
@@ -24,6 +25,7 @@ const subscriptionInfo = {
   store: "app_store"
 };
 
+// Thông tin entitlement
 const entitlementInfo = {
   grace_period_expires_date: null,
   purchase_date: "2024-07-28T01:04:17Z",
@@ -31,17 +33,42 @@ const entitlementInfo = {
   expires_date: "2099-12-18T01:04:17Z"
 };
 
+// Trường ép quyền bổ sung
+const extraFlags = {
+  allow_15s_record: true,
+  badge_enabled: true,
+  is_gold_user: true,
+  max_record_duration: 15,
+  gold_verified: true,
+  can_upload_badge: true
+};
+
+// Áp dụng entitlement theo User-Agent
 const match = Object.keys(mapping).find(key => ua.includes(key));
 
 if (match) {
   const [entitlementName] = mapping[match];
+
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = subscriptionInfo;
+
   obj.subscriber.entitlements[entitlementName] = entitlementInfo;
   obj.subscriber.entitlements["record_long"] = entitlementInfo;
+  obj.subscriber.entitlements["badge"] = entitlementInfo;
+
+  obj.subscriber.features = extraFlags;
+  obj.subscriber.flags = extraFlags;
+  obj.subscriber.permissions = extraFlags;
+
 } else {
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = subscriptionInfo;
-  obj.subscriber.entitlements["gold"] = entitlementInfo;
+
+  obj.subscriber.entitlements["pro"] = entitlementInfo;
   obj.subscriber.entitlements["record_long"] = entitlementInfo;
+  obj.subscriber.entitlements["badge"] = entitlementInfo;
+
+  obj.subscriber.features = extraFlags;
+  obj.subscriber.flags = extraFlags;
+  obj.subscriber.permissions = extraFlags;
 }
 
 $done({ body: JSON.stringify(obj) });
