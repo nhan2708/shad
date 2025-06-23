@@ -20,21 +20,21 @@ const subscriptionInfo = {
   expires_date: "2099-12-18T01:04:17Z",
   grace_period_expires_date: null,
   unsubscribe_detected_at: null,
-  original_purchase_date: "2024-07-28T01:04:18Z",
-  purchase_date: "2024-07-28T01:04:17Z",
+  original_purchase_date: "2024-08-27T01:04:18Z",
+  purchase_date: "2024-08-27T01:04:17Z",
   store: "app_store"
 };
 
 // Thông tin entitlement
 const entitlementInfo = {
   grace_period_expires_date: null,
-  purchase_date: "2024-07-28T01:04:17Z",
-  product_identifier: "com.ohoang7.premium.yearly",
+  purchase_date: "2024-08-27T01:04:17Z",
+  product_identifier: "com.nhan2708.premium.yearly",
   expires_date: "2099-12-18T01:04:17Z"
 };
 
 // Luôn gán các entitlement cần thiết cho Gold
-obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = subscriptionInfo;
+obj.subscriber.subscriptions["com.nhan2708.premium.yearly"] = subscriptionInfo;
 obj.subscriber.entitlements["gold"] = entitlementInfo;
 obj.subscriber.entitlements["record_long"] = entitlementInfo;
 obj.subscriber.entitlements["locket_gold_badge"] = entitlementInfo; // Bật công tắc Locket Gold badge
