@@ -42,24 +42,34 @@ if (match) {
   }
 
   obj.subscriber.entitlements[entitlement] = nhan2708;
-  obj.subscriber.entitlements["locketcamera"] = nhan2708;
-  obj.subscriber.subscriptions["locketcamera"] = ohoang7;
+  obj.subscriber.entitlements["record_long"] = nhan2708;
+  obj.subscriber.subscriptions["record_long"] = ohoang7;
 
 } else {
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
   obj.subscriber.entitlements.pro = nhan2708;
-  obj.subscriber.entitlements["locketcamera"] = nhan2708;
-  obj.subscriber.subscriptions["locketcamera"] = ohoang7;
+  obj.subscriber.entitlements["record_long"] = nhan2708;
+  obj.subscriber.subscriptions["record_long"] = ohoang7;
 }
 
 // Gợi ý thêm: bật cờ huy hiệu nếu app có dùng
-obj.subscriber.features = {
-  "badge_enabled": true,
-  "show_gold_badge": true,
-  "record_limit": 15
+obj.subscriber.entitlements = {
+  Gold: {
+    expires_date: "2099-12-31T23:59:59Z",
+    product_identifier: "com.lock.premium.yearly",
+    purchase_date: "2023-01-01T00:00:00Z"
+  },
+  record_long: {
+    expires_date: "2099-12-31T23:59:59Z",
+    product_identifier: "com.lock.premium.yearly",
+    purchase_date: "2023-01-01T00:00:00Z"
+  },
+  badge: {
+    expires_date: "2099-12-31T23:59:59Z",
+    product_identifier: "com.lock.premium.yearly",
+    purchase_date: "2023-01-01T00:00:00Z"
+  }
 };
 
-obj.badge_enabled = true;
-obj.show_gold_badge = true;
 
 $done({ body: JSON.stringify(obj) });
