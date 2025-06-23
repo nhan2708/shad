@@ -1,17 +1,9 @@
-// ========= ID Mapping ========= //
-const mapping = {
-  '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
-  'Locket': ['Gold']
-};
-
-// ========= Logic chính ========= //
+// ==== Unlock Full Locket (No Mapping) ====
 
 const ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 const obj = JSON.parse($response.body);
 
-obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
-
-// Thông tin gói đăng ký
+// Gói đăng ký giả lập
 const subscriptionInfo = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
@@ -25,7 +17,7 @@ const subscriptionInfo = {
   store: "app_store"
 };
 
-// Thông tin entitlement
+// Entitlement chính
 const entitlementInfo = {
   grace_period_expires_date: null,
   purchase_date: "2024-07-28T01:04:17Z",
@@ -33,42 +25,36 @@ const entitlementInfo = {
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Trường ép quyền bổ sung
-const extraFlags = {
+// Các flags mở khóa tính năng ẩn
+const recordFlags = {
   allow_15s_record: true,
-  badge_enabled: true,
   is_gold_user: true,
+  badge_enabled: true,
   max_record_duration: 15,
-  gold_verified: true,
-  can_upload_badge: true
+  recordSeconds: 15,
+  record_time_sec: 15,
+  long_video_unlocked: true,
+  can_record_long: true,
+  feature_record_15s: true
 };
 
-// Áp dụng entitlement theo User-Agent
-const match = Object.keys(mapping).find(key => ua.includes(key));
+// Gắn vào đối tượng subscriber
+obj.subscriber = obj.subscriber || {};
+obj.subscriber.subscriptions = {
+  "com.ohoang7.premium.yearly": subscriptionInfo
+};
 
-if (match) {
-  const [entitlementName] = mapping[match];
+obj.subscriber.entitlements = {
+  Gold: entitlementInfo,
+  record_long: entitlementInfo,
+  badge: entitlementInfo
+};
 
-  obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = subscriptionInfo;
-
-  obj.subscriber.entitlements[entitlementName] = entitlementInfo;
-  obj.subscriber.entitlements["record_long"] = entitlementInfo;
-  obj.subscriber.entitlements["badge"] = entitlementInfo;
-
-  obj.subscriber.features = extraFlags;
-  obj.subscriber.flags = extraFlags;
-  obj.subscriber.permissions = extraFlags;
-
-} else {
-  obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = subscriptionInfo;
-
-  obj.subscriber.entitlements["pro"] = entitlementInfo;
-  obj.subscriber.entitlements["record_long"] = entitlementInfo;
-  obj.subscriber.entitlements["badge"] = entitlementInfo;
-
-  obj.subscriber.features = extraFlags;
-  obj.subscriber.flags = extraFlags;
-  obj.subscriber.permissions = extraFlags;
-}
+// Gắn flags vào mọi nhánh có thể app đang dùng
+obj.subscriber.features = recordFlags;
+obj.subscriber.flags = recordFlags;
+obj.subscriber.permissions = recordFlags;
+obj.subscriber.config = recordFlags;
+obj.subscriber.record = recordFlags;
 
 $done({ body: JSON.stringify(obj) });
