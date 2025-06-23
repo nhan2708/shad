@@ -42,6 +42,12 @@ if (match) {
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = subscriptionInfo;
 
   obj.subscriber.entitlements[entitlementName] = entitlementInfo;
+
+  // Bật huy hiệu cho Gold
+  if (entitlementName === 'Gold') {
+    obj.subscriber.entitlements['badge'] = entitlementInfo;
+  }
+
   obj.subscriber.entitlements["record_long"] = entitlementInfo;
   obj.subscriber.entitlements["badge"] = entitlementInfo;
 
