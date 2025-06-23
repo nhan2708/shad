@@ -1,14 +1,45 @@
-#!name=Locket-Ohoang7_Gold
-#!desc=Crack VIP Gold + quay video 15s
-#!author=Ohoang7 x Nhan2708
-#!url=https://raw.githubusercontent.com/nhan2708/shad/main/modules/Locket_VTN.sgmodule
+#!name=Locket Full Unlock
+#!desc=Mở khóa Gold + quay video 15s + huy hiệu thành viên cho app Locket
 
 [Script]
-# ✅ Giả lập phản hồi đã mua
-revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), script-path=https://raw.githubusercontent.com/nhan2708/shad/main/js/Locket_Ohoang7.js, requires-body=true, max-size=-1, timeout=60
+unlock_locket = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/[^/]+$, requires-body=true, script=
+  const obj = JSON.parse($response.body);
 
-# ✅ Xóa header nhạy cảm
-deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/nhan2708/shad/main/js/deleteHeader.js, timeout=60
+  obj.subscriber = {
+    entitlements: {
+      Gold: {
+        expires_date: "2099-12-31T23:59:59Z",
+        product_identifier: "com.lock.premium.yearly",
+        purchase_date: "2023-01-01T00:00:00Z"
+      },
+      record_long: {
+        expires_date: "2099-12-31T23:59:59Z",
+        product_identifier: "com.lock.premium.yearly",
+        purchase_date: "2023-01-01T00:00:00Z"
+      },
+      badge: {
+        expires_date: "2099-12-31T23:59:59Z",
+        product_identifier: "com.lock.premium.yearly",
+        purchase_date: "2023-01-01T00:00:00Z"
+      }
+    },
+    subscriptions: {
+      "com.lock.premium.yearly": {
+        purchase_date: "2023-01-01T00:00:00Z",
+        expires_date: "2099-12-31T23:59:59Z",
+        ownership_type: "PURCHASED",
+        store: "app_store",
+        is_sandbox: false,
+        period_type: "normal"
+      }
+    },
+    features: {
+      allow_15s_record: true,
+      badge_enabled: true
+    }
+  };
+
+  $done({ body: JSON.stringify(obj) });
 
 [MITM]
 hostname = %APPEND% api.revenuecat.com
