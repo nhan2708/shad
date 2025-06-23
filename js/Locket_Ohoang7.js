@@ -1,7 +1,7 @@
 // ========= ID Mapping ========= //
 const mapping = {
   '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
-  'Locket': ['Gold']
+  'Locket': ['gold'] // Sử dụng "gold" là entitlement đúng
 };
 
 // ========= Logic chính ========= //
@@ -41,23 +41,15 @@ if (match) {
 
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = subscriptionInfo;
 
+  // Gán entitlement "gold" (bật huy hiệu và toàn bộ quyền lợi Gold)
   obj.subscriber.entitlements[entitlementName] = entitlementInfo;
-
-  // Bật huy hiệu cho Gold
-  if (entitlementName === 'Gold') {
-    obj.subscriber.entitlements['badge'] = entitlementInfo;
-  }
-
   obj.subscriber.entitlements["record_long"] = entitlementInfo;
-  obj.subscriber.entitlements["badge"] = entitlementInfo;
 
 } else {
-  // Nếu không khớp UA
+  // Nếu không khớp UA, vẫn gán quyền lợi Gold
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = subscriptionInfo;
-
-  obj.subscriber.entitlements["pro"] = entitlementInfo;
+  obj.subscriber.entitlements["gold"] = entitlementInfo;
   obj.subscriber.entitlements["record_long"] = entitlementInfo;
-  obj.subscriber.entitlements["badge"] = entitlementInfo;
 }
 
 $done({ body: JSON.stringify(obj) });
