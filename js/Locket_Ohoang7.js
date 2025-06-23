@@ -43,12 +43,12 @@ if (match) {
   }
 
   obj.subscriber.entitlements[entitlement] = nhan2708;
-  obj.subscriber.entitlements["record_15s"] = nhan2708;
+  obj.subscriber.entitlements["record_long"] = nhan2708;
 
 } else {
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
   obj.subscriber.entitlements.pro = nhan2708;
-  obj.subscriber.entitlements["record_15s"] = nhan2708;
+  obj.subscriber.entitlements["record_long"] = nhan2708;
 }
 
 $done({ body: JSON.stringify(obj) });
