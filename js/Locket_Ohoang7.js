@@ -1,7 +1,18 @@
+// ========= ID Mapping ========= //
+const mapping = {
+  '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
+  'Locket': ['gold']
+};
+
+// ========= Logic chính ========= //
+
+const ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 const obj = JSON.parse($response.body);
 
-// Subscription giả
-const sub = {
+obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
+
+// Thông tin gói đăng ký
+const subscriptionInfo = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
   billing_issues_detected_at: null,
@@ -14,53 +25,18 @@ const sub = {
   store: "app_store"
 };
 
-// Entitlement giả
-const ent = {
+// Thông tin entitlement
+const entitlementInfo = {
   grace_period_expires_date: null,
   purchase_date: "2024-07-28T01:04:17Z",
   product_identifier: "com.ohoang7.premium.yearly",
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Flags bật badge + quay 15s
-const flags = {
-  is_gold_user: true,
-  badge_enabled: true,
-  badgeVisible: true,
-  unlock_gold: true,
-  verified_gold_user: true,
-  can_toggle_badge: true,
-  enable_gold_badge_feature: true,
-  gold_status: "unlocked",
-  allow_15s_record: true,
-  recordSeconds: 15,
-  max_record_duration: 15,
-  long_video_unlocked: true
-};
-
-// Inject dữ liệu vào tất cả nơi có thể
-obj.subscriber = obj.subscriber || {};
-obj.subscriber.subscriptions = {
-  "com.ohoang7.premium.yearly": sub
-};
-obj.subscriber.entitlements = {
-  Gold: ent,
-  badge: ent,
-  record_long: ent
-};
-obj.subscriber.features = flags;
-obj.subscriber.flags = flags;
-obj.subscriber.permissions = flags;
-obj.subscriber.badge = flags;
-obj.subscriber.config = flags;
-obj.subscriber.record = flags;
-
-// Ép settings để bật toggle tạm thời
-obj.settings = {
-  badge_enabled: true,
-  can_toggle_badge: true,
-  should_display_badge: true,
-  is_gold_user: true
-};
+// Luôn gán các entitlement cần thiết cho Gold
+obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = subscriptionInfo;
+obj.subscriber.entitlements["gold"] = entitlementInfo;
+obj.subscriber.entitlements["record_long"] = entitlementInfo;
+obj.subscriber.entitlements["locket_gold_badge"] = entitlementInfo; // Bật công tắc Locket Gold badge
 
 $done({ body: JSON.stringify(obj) });
