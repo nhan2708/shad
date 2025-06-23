@@ -1,17 +1,16 @@
-// ========= ID Mapping ========= //
+
 const mapping = {
   '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
   'Locket': ['gold']
 };
 
-// ========= Logic chính ========= //
+
 
 const ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 const obj = JSON.parse($response.body);
 
 obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
 
-// Thông tin gói đăng ký
 const subscriptionInfo = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
@@ -25,7 +24,6 @@ const subscriptionInfo = {
   store: "app_store"
 };
 
-// Thông tin entitlement
 const entitlementInfo = {
   grace_period_expires_date: null,
   purchase_date: "2024-08-27T01:04:17Z",
@@ -33,7 +31,6 @@ const entitlementInfo = {
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Luôn gán các entitlement cần thiết cho Gold
 obj.subscriber.subscriptions["com.nhan2708.premium.yearly"] = subscriptionInfo;
 obj.subscriber.entitlements["gold"] = entitlementInfo;
 obj.subscriber.entitlements["record_long"] = entitlementInfo;
