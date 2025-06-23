@@ -1,10 +1,7 @@
-// ==== Unlock Full Locket (No Mapping) ====
-
-const ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 const obj = JSON.parse($response.body);
 
-// Gói đăng ký giả lập
-const subscriptionInfo = {
+// Subscription giả
+const sub = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
   billing_issues_detected_at: null,
@@ -17,44 +14,53 @@ const subscriptionInfo = {
   store: "app_store"
 };
 
-// Entitlement chính
-const entitlementInfo = {
+// Entitlement giả
+const ent = {
   grace_period_expires_date: null,
   purchase_date: "2024-07-28T01:04:17Z",
   product_identifier: "com.ohoang7.premium.yearly",
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Các flags mở khóa tính năng ẩn
-const recordFlags = {
-  allow_15s_record: true,
+// Flags bật badge + quay 15s
+const flags = {
   is_gold_user: true,
   badge_enabled: true,
-  max_record_duration: 15,
+  badgeVisible: true,
+  unlock_gold: true,
+  verified_gold_user: true,
+  can_toggle_badge: true,
+  enable_gold_badge_feature: true,
+  gold_status: "unlocked",
+  allow_15s_record: true,
   recordSeconds: 15,
-  record_time_sec: 15,
-  long_video_unlocked: true,
-  can_record_long: true,
-  feature_record_15s: true
+  max_record_duration: 15,
+  long_video_unlocked: true
 };
 
-// Gắn vào đối tượng subscriber
+// Inject dữ liệu vào tất cả nơi có thể
 obj.subscriber = obj.subscriber || {};
 obj.subscriber.subscriptions = {
-  "com.ohoang7.premium.yearly": subscriptionInfo
+  "com.ohoang7.premium.yearly": sub
 };
-
 obj.subscriber.entitlements = {
-  Gold: entitlementInfo,
-  record_long: entitlementInfo,
-  badge: entitlementInfo
+  Gold: ent,
+  badge: ent,
+  record_long: ent
 };
+obj.subscriber.features = flags;
+obj.subscriber.flags = flags;
+obj.subscriber.permissions = flags;
+obj.subscriber.badge = flags;
+obj.subscriber.config = flags;
+obj.subscriber.record = flags;
 
-// Gắn flags vào mọi nhánh có thể app đang dùng
-obj.subscriber.features = recordFlags;
-obj.subscriber.flags = recordFlags;
-obj.subscriber.permissions = recordFlags;
-obj.subscriber.config = recordFlags;
-obj.subscriber.record = recordFlags;
+// Ép settings để bật toggle tạm thời
+obj.settings = {
+  badge_enabled: true,
+  can_toggle_badge: true,
+  should_display_badge: true,
+  is_gold_user: true
+};
 
 $done({ body: JSON.stringify(obj) });
