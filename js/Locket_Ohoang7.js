@@ -55,19 +55,19 @@ if (match) {
 // Gợi ý thêm: bật cờ huy hiệu nếu app có dùng
 obj.subscriber.entitlements = {
   Gold: {
-    expires_date: "2099-12-31T23:59:59Z",
-    product_identifier: "com.lock.premium.yearly",
-    purchase_date: "2023-01-01T00:00:00Z"
+    expires_date: "2099-12-18T01:04:17Z",
+    product_identifier: "com.ohoang7.premium.yearly",
+    purchase_date: "2024-07-28T01:04:17Z"
   },
   record_long: {
-    expires_date: "2099-12-31T23:59:59Z",
-    product_identifier: "com.lock.premium.yearly",
-    purchase_date: "2023-01-01T00:00:00Z"
+    expires_date: "2099-12-18T01:04:17Z",
+    product_identifier: "com.ohoang7.premium.yearly",
+    purchase_date: "2024-07-28T01:04:17Z"
   },
   badge: {
-    expires_date: "2099-12-31T23:59:59Z",
-    product_identifier: "com.lock.premium.yearly",
-    purchase_date: "2023-01-01T00:00:00Z"
+    expires_date: "2099-12-18T01:04:17Z",
+    product_identifier: "com.ohoang7.premium.yearly",
+    purchase_date: "2024-07-28T01:04:17Z"
   }
 };
 
