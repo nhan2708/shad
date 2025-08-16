@@ -38,6 +38,18 @@ const flags = {
   long_video_unlocked: true
 };
 
+// VPN Mỹ giả lập
+const vpn = {
+  status: "connected",
+  country: "US",
+  country_name: "United States",
+  ip: "104.26.10.123",
+  location: "Los Angeles, California, US",
+  connection_type: "premium",
+  expires_date: "2099-12-18T01:04:17Z",
+  is_premium: true
+};
+
 // Inject vào các nhánh
 obj.subscriber = obj.subscriber || {};
 obj.subscriber.subscriptions = {
@@ -55,6 +67,9 @@ obj.subscriber.permissions = flags;
 obj.subscriber.badge = flags;
 obj.subscriber.config = flags;
 obj.subscriber.record = flags;
+
+// Thêm VPN giả
+obj.subscriber.vpn = vpn;
 
 // Inject settings riêng để bật toggle
 obj.settings = {
