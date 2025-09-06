@@ -1,82 +1,50 @@
-const obj = JSON.parse($response.body);
+// ========= ID ========= //
+const mapping = {
+  '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
+  'Locket': ['Gold']
+};
 
-// Subscription giả lập
-const sub = {
+var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
+var obj = JSON.parse($response.body);
+
+// Định nghĩa thông tin thuê bao
+var ohoang7 = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
   billing_issues_detected_at: null,
   period_type: "normal",
-  expires_date: "2099-12-18T01:04:17Z",
+  expires_date: "2025-08-27T01:04:17Z",
   grace_period_expires_date: null,
   unsubscribe_detected_at: null,
-  original_purchase_date: "2024-08-27T01:04:17Z",
-  purchase_date: "2024-08-27T01:04:17Z",
+  original_purchase_date: "2025-08-27T01:04:18Z",
+  purchase_date: "2025-08-27T01:04:17Z",
   store: "app_store"
 };
 
-// Entitlement giả
-const ent = {
+var vuong2023 = {
   grace_period_expires_date: null,
-  purchase_date: "2024-08-27T01:04:17Z",
+  purchase_date: "2025-08-27T01:04:17Z",
   product_identifier: "com.ohoang7.premium.yearly",
-  expires_date: "2099-12-18T01:04:17Z"
+  expires_date: "2025-08-27T01:04:17Z"
 };
 
-// Các flags & settings liên quan badge và quay video
-const flags = {
-  is_gold_user: true,
-  badge_enabled: true,
-  badgeVisible: true,
-  unlock_gold: true,
-  verified_gold_user: true,
-  can_toggle_badge: true,
-  enable_gold_badge_feature: true,
-  gold_status: "unlocked",
-  allow_15s_record: true,
-  recordSeconds: 15,
-  max_record_duration: 15,
-  long_video_unlocked: true
-};
+// Xử lý theo mapping
+const match = Object.keys(mapping).find(key => ua.includes(key));
 
-// VPN Mỹ giả lập
-const vpn = {
-  status: "connected",
-  country: "US",
-  country_name: "United States",
-  ip: "104.26.10.123",
-  location: "Los Angeles, California, US",
-  connection_type: "premium",
-  expires_date: "2099-12-18T01:04:17Z",
-  is_premium: true
-};
+if (match) {
+  let [entitlement, product] = mapping[match];
+  
+  if (product) {
+    vuong2023.product_identifier = product;
+    obj.subscriber.subscriptions[product] = ohoang7;
+  } else {
+    obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
+  }
 
-// Inject vào các nhánh
-obj.subscriber = obj.subscriber || {};
-obj.subscriber.subscriptions = {
-  "com.ohoang7.premium.yearly": sub
-};
-obj.subscriber.entitlements = {
-  Gold: ent,
-  badge: ent,
-  record_long: ent
-};
-
-obj.subscriber.features = flags;
-obj.subscriber.flags = flags;
-obj.subscriber.permissions = flags;
-obj.subscriber.badge = flags;
-obj.subscriber.config = flags;
-obj.subscriber.record = flags;
-
-// Thêm VPN giả
-obj.subscriber.vpn = vpn;
-
-// Inject settings riêng để bật toggle
-obj.settings = {
-  badge_enabled: true,
-  can_toggle_badge: true,
-  should_display_badge: true,
-  is_gold_user: true
-};
+  obj.subscriber.entitlements[entitlement] = vuong2023;
+} else {
+  obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
+  obj.subscriber.entitlements.pro = vuong2023;
+}
 
 $done({ body: JSON.stringify(obj) });
