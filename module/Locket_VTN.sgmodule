@@ -1,12 +1,11 @@
-#!name=Locket Unlock Gold (All-in-One nhan2708)
-#!desc=Mở khoá premium cho Locket Gold (gộp deleteHeader + unlock)
-#!version= 1.2
+#!name=Locket Unlock Gold (All-in-One nhan2708 + VPN US)
+#!desc=Mở khoá premium cho Locket Gold + ép app Locket đi VPN Mỹ (SOCKS5)
+#!version= 1.6
 #!author=nhan2708
 
 [Script]
 delete_revenuecat_headers = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), requires-body=false, script-update-interval=0, script-content=|
   const version = 'V1.0.2';
-
   function setHeaderValue(headers, key, value) {
     const lowerKey = key.toLowerCase();
     if (lowerKey in headers) {
@@ -15,7 +14,6 @@ delete_revenuecat_headers = type=http-request, pattern=^https:\/\/api\.revenueca
       headers[key] = value;
     }
   }
-
   var modifiedHeaders = $request.headers;
   setHeaderValue(modifiedHeaders, "X-RevenueCat-ETag", "");
   $done({ headers: modifiedHeaders });
@@ -25,12 +23,9 @@ unlock_locket = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\
     '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
     'Locket': ['Gold']
   };
-
   var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
   var obj = JSON.parse($response.body);
-
   obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
-
   var nhan2708 = {
     is_sandbox: false,
     ownership_type: "PURCHASED",
@@ -43,16 +38,13 @@ unlock_locket = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\
     purchase_date: "2025-08-27T01:04:17Z",
     store: "app_store"
   };
-
   var nhan2708_sub = {
     grace_period_expires_date: null,
     purchase_date: "2025-08-27T01:04:17Z",
     product_identifier: "com.ohoang7.premium.yearly",
     expires_date: "2099-12-18T01:04:17Z"
   };
-
   const match = Object.keys(mapping).find(key => ua.includes(key));
-
   if (match) {
     let [entitlement, product] = mapping[match];
     if (product) {
@@ -66,8 +58,19 @@ unlock_locket = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\
     obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = nhan2708;
     obj.subscriber.entitlements.pro = nhan2708_sub;
   }
-
   $done({ body: JSON.stringify(obj) });
 
 [MITM]
 hostname = %APPEND% api.revenuecat.com
+
+[Proxy]
+US_SOCKS5 = socks5, 23.95.45.92, 26842, username=muaproxy68aab237819dc, password=uys2|1d1bzqkbj
+
+[Policy]
+static=VPN-US, US_SOCKS5, direct
+
+[Rule]
+# Chỉ app Locket mới bị ép đi VPN Mỹ
+USER-AGENT, Locket*, VPN-US
+PROCESS-NAME, Locket, VPN-US
+DOMAIN-SUFFIX, revenuecat.com, VPN-US
