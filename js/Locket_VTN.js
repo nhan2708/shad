@@ -9,15 +9,15 @@ const sub = {
   expires_date: "2099-12-18T01:04:17Z",
   grace_period_expires_date: null,
   unsubscribe_detected_at: null,
-  original_purchase_date: "2024-08-27T01:04:17Z",
-  purchase_date: "2024-08-27T01:04:17Z",
+  original_purchase_date: "2008-08-27T01:04:17Z", 
+  purchase_date: "2008-08-27T01:04:17Z",  
   store: "app_store"
 };
 
 // Entitlement giả
 const ent = {
   grace_period_expires_date: null,
-  purchase_date: "2024-08-27T01:04:17Z",
+  purchase_date: "2008-08-27T01:04:17Z", 
   product_identifier: "com.ohoang7.premium.yearly",
   expires_date: "2099-12-18T01:04:17Z"
 };
