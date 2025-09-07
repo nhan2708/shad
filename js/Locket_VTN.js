@@ -1,7 +1,7 @@
 const obj = JSON.parse($response.body);
 
-// Subscription giả lập
-const sub = {
+// Template cho subscription
+const subscription = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
   billing_issues_detected_at: null,
@@ -9,22 +9,22 @@ const sub = {
   expires_date: "2099-12-18T01:04:17Z",
   grace_period_expires_date: null,
   unsubscribe_detected_at: null,
-  original_purchase_date: "2008-08-27T01:04:17Z", 
-  purchase_date: "2008-08-27T01:04:17Z",  
+  original_purchase_date: "2008-08-27T01:04:17Z",
+  purchase_date: "2008-08-27T01:04:17Z",
   store: "app_store"
 };
 
-// Entitlement giả
-const ent = {
+// Hàm tạo entitlement nhanh
+const entitlement = (id) => ({
   grace_period_expires_date: null,
-  purchase_date: "2008-08-27T01:04:17Z", 
-  product_identifier: "com.ohoang7.premium.yearly",
+  purchase_date: "2008-08-27T01:04:17Z",
+  product_identifier: id,
   expires_date: "2099-12-18T01:04:17Z"
-};
+});
 
-// Các flags & settings liên quan badge và quay video
+// Gom toàn bộ flag badge + video
 const flags = {
-  // Badge/Gold
+  // Badge / Gold
   badge_enabled: true,
   badgeVisible: true,
   should_display_badge: true,
@@ -47,31 +47,25 @@ const flags = {
   recordingDidFail: false
 };
 
-
-// Inject vào các nhánh
-obj.subscriber = obj.subscriber || {};
-obj.subscriber.subscriptions = {
-  "com.ohoang7.premium.yearly": sub
+// Build subscriber
+obj.subscriber = {
+  subscriptions: {
+    "com.ohoang7.premium.yearly": subscription
+  },
+  entitlements: {
+    Gold: entitlement("com.ohoang7.gold"),
+    Badge: entitlement("com.ohoang7.badge"),
+    RecordLong: entitlement("com.ohoang7.recordlong")
+  },
+  features: flags,
+  flags,
+  permissions: flags,
+  badge: flags,
+  config: flags,
+  record: flags
 };
-obj.subscriber.entitlements = {
-  Gold: ent,
-  badge: ent,
-  record_long: ent
-};
 
-obj.subscriber.features = flags;
-obj.subscriber.flags = flags;
-obj.subscriber.permissions = flags;
-obj.subscriber.badge = flags;
-obj.subscriber.config = flags;
-obj.subscriber.record = flags;
-
-// Inject settings riêng để bật toggle
-obj.settings = {
-  badge_enabled: true,
-  can_toggle_badge: true,
-  should_display_badge: true,
-  is_gold_user: true
-};
+// Settings chung
+obj.settings = flags;
 
 $done({ body: JSON.stringify(obj) });
