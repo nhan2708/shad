@@ -24,19 +24,29 @@ const ent = {
 
 // Các flags & settings liên quan badge và quay video
 const flags = {
-  is_gold_user: true,
+  // Badge/Gold
   badge_enabled: true,
   badgeVisible: true,
-  unlock_gold: true,
-  verified_gold_user: true,
-  can_toggle_badge: true,
+  should_display_badge: true,
+  is_gold_user: true,
   enable_gold_badge_feature: true,
   gold_status: "unlocked",
-  allow_15s_record: true,
+  verified_gold_user: true,
+  unlockBadge: true,
+  awardBadge: true,
+  displayGoldBadge: true,
+
+  // Video
+  allow_video_record: true,
   recordSeconds: 15,
   max_record_duration: 15,
-  long_video_unlocked: true
+  long_video_unlocked: true,
+  startVideoRecording: true,
+  stopVideoRecording: true,
+  recordingFinished: true,
+  recordingDidFail: false
 };
+
 
 // Inject vào các nhánh
 obj.subscriber = obj.subscriber || {};
