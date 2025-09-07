@@ -1,16 +1,17 @@
+
+
 const version = 'V1.0.2';
 
-function setHeaderValue(headers, key, value) {
-  const lowerKey = key.toLowerCase();
-  if (lowerKey in headers) {
-    headers[lowerKey] = value;
+function setHeaderValue(headers, name, value) {
+  const lower = name.toLowerCase();
+  if (lower in headers) {
+    headers[lower] = value;
   } else {
-    headers[key] = value;
+    headers[name] = value;
   }
 }
 
-var modifiedHeaders = $request.headers;
-
+let modifiedHeaders = $request.headers;
 setHeaderValue(modifiedHeaders, "X-RevenueCat-ETag", "");
 
 $done({ headers: modifiedHeaders });
