@@ -1,10 +1,9 @@
-#!name=Locket Unlock Full (nhan2708)
-#!desc=Unlock Locket Gold 
-
 [Script]
-delete_revenuecat_headers = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/nhan2708/shad/main/js/deleteHeader.js
+# Xóa cache request (Quan trọng để hiện Badge)
+Locket_Req = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/v1\/(subscribers|receipts), script-path=https://raw.githubusercontent.com/nhan2708/shad/main/js/Locket_VTN.js, requires-body=false
 
-unlock_locket = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/[^/]+$, requires-body=true, script-path=https://raw.githubusercontent.com/nhan2708/shad/main/js/Locket_VTN.js
+# Unlock tính năng Gold
+Locket_Res = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/subscribers, script-path=https://raw.githubusercontent.com/nhan2708/shad/main/js/Locket_VTN.js, requires-body=true
 
 [MITM]
-hostname = %APPEND% api.revenuecat.com
+hostname = api.revenuecat.com
