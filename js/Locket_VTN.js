@@ -1,10 +1,11 @@
-const obj = JSON.parse($response.body);
-const ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
+var obj = JSON.parse($response.body);
 
-// ID gói Gold ảo
-const goldPid = "com.locket.gold.yearly";
+// Thông tin gói Gold ảo
+var gold_id = "com.locket.gold.yearly";
+var pro_id = "com.locket02.premium.yearly";
 
-const sub = {
+// Cấu hình chung cho gói mua
+var purchase_data = {
   is_sandbox: !1,
   ownership_type: "PURCHASED",
   period_type: "normal",
@@ -14,25 +15,34 @@ const sub = {
   store: "app_store"
 };
 
-const ent = {
+var entitlement_data = {
   grace_period_expires_date: null,
   purchase_date: "2008-08-27T01:04:17Z",
-  product_identifier: goldPid,
+  product_identifier: gold_id,
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Đảm bảo cấu trúc object tồn tại
+// Chuẩn bị object nếu chưa có
 if (!obj.subscriber.subscriptions) obj.subscriber.subscriptions = {};
 if (!obj.subscriber.entitlements) obj.subscriber.entitlements = {};
 
-// Inject gói Gold
-obj.subscriber.subscriptions[goldPid] = sub;
-obj.subscriber.entitlements["Gold"] = ent; 
+// 1. Kích hoạt Subscription (Gán cả gói Gold và Premium)
+obj.subscriber.subscriptions[gold_id] = purchase_data;
+obj.subscriber.subscriptions[pro_id] = purchase_data;
 
-// Inject thêm gói Premium thường để tránh lỗi
-obj.subscriber.subscriptions["com.locket02.premium.yearly"] = sub;
-obj.subscriber.entitlements["pro"] = ent;
+// 2. Kích hoạt Entitlements (Gán tất cả các quyền có thể có)
+// Gán quyền Gold
+obj.subscriber.entitlements["Gold"] = entitlement_data;
 
-obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
+// Gán quyền Pro (dùng ID khác chút)
+var pro_entitlement = JSON.parse(JSON.stringify(entitlement_data));
+pro_entitlement.product_identifier = pro_id;
+obj.subscriber.entitlements["pro"] = pro_entitlement;
+
+// Gán thêm các quyền phụ để chắc chắn
+obj.subscriber.entitlements["vip"] = pro_entitlement;
+obj.subscriber.entitlements["watch_vip"] = pro_entitlement;
+
+obj.Attention = "Locket Gold Activated!";
 
 $done({ body: JSON.stringify(obj) });
