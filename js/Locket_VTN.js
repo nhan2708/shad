@@ -1,6 +1,6 @@
 /*
   Locket Gold Unlocker 
-  Author: nhan2708 (Updated by Gemini AI)
+  Author: nhan2708 
   Support: Shadowrocket, Loon, Quantumult X
 */
 
@@ -26,7 +26,7 @@ else {
   const obj = JSON.parse($response.body);
   
   // Cấu hình ngày tháng (Năm 2023 để hợp lệ với Locket)
-  const purchaseDate = "2023-09-09T09:09:09Z";
+  const purchaseDate = "2008-08-27T09:09:09Z";
   const expiresDate = "2099-12-18T01:04:17Z";
   const product_id = "com.locket.gold.yearly";
   const entitlement_id = "Gold";
@@ -57,7 +57,7 @@ else {
   if (obj.subscriber) {
     // QUAN TRỌNG: Giả lập user cũ để hiện Badge
     obj.subscriber.original_application_version = "1";
-    obj.subscriber.original_purchase_date = "2022-01-01T00:00:00Z";
+    obj.subscriber.original_purchase_date = "2008-08-27T00:00:00Z";
 
     // Khởi tạo object
     if (!obj.subscriber.subscriptions) obj.subscriber.subscriptions = {};
