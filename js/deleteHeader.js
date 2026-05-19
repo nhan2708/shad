@@ -1,17 +1,18 @@
+/*
+  RevenueCat Cache Cleaner
+  Author: nhan2708
+*/
 
-
-const version = 'V1.0.2';
-
-function setHeaderValue(headers, name, value) {
-  const lower = name.toLowerCase();
-  if (lower in headers) {
-    headers[lower] = value;
-  } else {
-    headers[name] = value;
-  }
+function removeHeader(headers, name) {
+  delete headers[name];
+  delete headers[name.toLowerCase()];
 }
 
-let modifiedHeaders = $request.headers;
-setHeaderValue(modifiedHeaders, "X-RevenueCat-ETag", "");
+let headers = { ...$request.headers };
 
-$done({ headers: modifiedHeaders });
+// Xóa cache headers
+removeHeader(headers, "X-RevenueCat-ETag");
+removeHeader(headers, "If-None-Match");
+removeHeader(headers, "ETag");
+
+$done({ headers });
