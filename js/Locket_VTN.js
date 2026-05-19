@@ -1,44 +1,35 @@
 const obj = JSON.parse($response.body);
 
-const purchaseDate = "2008-08-27T09:09:09Z";
-const expiresDate = "2099-12-18T01:04:17Z";
+const purchaseDate = "2024-08-27T00:00:00Z";
+const expiresDate = "2099-12-31T23:59:59Z";
 
-const product_id = "com.locket.gold.yearly";
+const productId = "vip+watch_vip";
 
-const subData = {
+obj.subscriber ??= {};
+obj.subscriber.subscriptions ??= {};
+obj.subscriber.entitlements ??= {};
+obj.subscriber.active_subscriptions ??= [];
+
+obj.subscriber.subscriptions[productId] = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
-  store: "app_store",
-  purchase_date: purchaseDate,
-  original_purchase_date: purchaseDate,
-  expires_date: expiresDate,
+  billing_issues_detected_at: null,
   period_type: "normal",
-  product_identifier: product_id
+  expires_date: expiresDate,
+  grace_period_expires_date: null,
+  unsubscribe_detected_at: null,
+  original_purchase_date: purchaseDate,
+  purchase_date: purchaseDate,
+  store: "app_store"
 };
 
-const entData = {
-  product_identifier: product_id,
+obj.subscriber.entitlements["Gold"] = {
+  grace_period_expires_date: null,
   purchase_date: purchaseDate,
+  product_identifier: productId,
   expires_date: expiresDate
 };
 
-if (obj.subscriber) {
-
-  obj.subscriber.original_application_version = "1";
-  obj.subscriber.original_purchase_date = purchaseDate;
-
-  obj.subscriber.subscriptions ??= {};
-  obj.subscriber.entitlements ??= {};
-  obj.subscriber.active_subscriptions ??= [];
-
-  obj.subscriber.subscriptions[product_id] = subData;
-
-  obj.subscriber.entitlements["Gold"] = entData;
-  obj.subscriber.entitlements["pro"] = entData;
-
-  if (!obj.subscriber.active_subscriptions.includes(product_id)) {
-    obj.subscriber.active_subscriptions.push(product_id);
-  }
-}
+obj.subscriber.active_subscriptions.push(productId);
 
 $done({ body: JSON.stringify(obj) });
